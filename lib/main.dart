@@ -30,30 +30,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 TextEditingController _multiCopy = TextEditingController();
-TextEditingController _unameController = TextEditingController(
-    text: "https://h5.m.taobao.com/cart/order.html?buyMlow=false&buyParam=");
-TextEditingController _url = TextEditingController();
+TextEditingController _unameController = TextEditingController(text: "https://h5.m.taobao.com/cart/order.html?buyMlow=false&buyParam=");
 TextEditingController _number = TextEditingController(text: "1");
+TextEditingController _numberEachSegment = TextEditingController(text: "不分组");
 
 class _MyHomePageState extends State<MyHomePage> {
   String _counter = "";
 
   void _incrementCounter() {
     setState(() {
-      final stringFragments =
-          _multiCopy.text.replaceAll("&id=", " id= ").replaceAll("?id=", " id= ").split(" id=");
-      int index = 0;
+      final stringFragments = _multiCopy.text.split("https://");
       _counter = _unameController.text;
-      stringFragments.forEach((element) {
-        index++;
-        if (element.startsWith(" ")) {
-          if (index >= 1 && index != stringFragments.length - 1) {
-            _counter += ","+element.substring(1, 13) + "_" + _number.text;
-          } else {
-            _counter += element.substring(1, 13) + "_" + _number.text;
-          }
+      for (int i = 0; i < stringFragments.length; i++) {
+        final fragment = stringFragments[i];
+        var index = fragment.indexOf("&id=");
+        if (index < 0) index = fragment.indexOf("?id=");
+        if (index < 0) continue;
+        String id = "";
+        String skuId = "";
+        id = fragment.substring(index + 4, index + 16);
+        final skuIdIndex = fragment.indexOf("skuId=");
+        if (skuIdIndex > 0) skuId = "_" + fragment.substring(skuIdIndex + 6, skuIdIndex + 19);
+        if (i > 1 && i <= stringFragments.length) {
+          _counter += "," + id + "_" + _number.text+skuId;
+        } else {
+          _counter += id + "_" + _number.text+skuId;
         }
-      });
+      }
     });
   }
 
@@ -93,9 +96,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ),
                 TextField(
                   decoration: const InputDecoration(
-                    labelText: "数量",
+                    labelText: "购买数量",
                   ),
                   controller: _number,
+                ),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: "每一组多少个（默认不分）",
+                  ),
+                  controller: _numberEachSegment,
                 ),
                 const Text(
                   "生成链接：",
