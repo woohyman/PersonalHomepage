@@ -39,22 +39,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      final stringFragments = _multiCopy.text.split("https://");
-      _counter = _unameController.text;
-      for (int i = 0; i < stringFragments.length; i++) {
-        final fragment = stringFragments[i];
-        var index = fragment.indexOf("&id=");
-        if (index < 0) index = fragment.indexOf("?id=");
-        if (index < 0) continue;
-        String id = "";
-        String skuId = "";
-        id = fragment.substring(index + 4, index + 16);
-        final skuIdIndex = fragment.indexOf("skuId=");
-        if (skuIdIndex > 0) skuId = "_" + fragment.substring(skuIdIndex + 6, skuIdIndex + 19);
-        if (i > 1 && i <= stringFragments.length) {
-          _counter += "," + id + "_" + _number.text+skuId;
-        } else {
-          _counter += id + "_" + _number.text+skuId;
+      var stringFragments = _multiCopy.text.split("https://");
+      _counter = "";
+      int _segmentCount = int.tryParse(_numberEachSegment.text) ?? (stringFragments.length - 1);
+      stringFragments = stringFragments.sublist(1, stringFragments.length);
+      var groups = 0;
+      if (stringFragments.length % _segmentCount > 0)
+        groups = (stringFragments.length / _segmentCount).toInt()+1;
+      else
+        groups = (stringFragments.length / _segmentCount).toInt();
+
+      print("groups =====> " + groups.toString() + " " + _segmentCount.toString());
+      for (int j = 0; j < groups; j++) {
+        print("groups =====222222> " + groups.toString());
+        List segment = List.empty();
+        if (j == groups - 1) segment = stringFragments.sublist(j * _segmentCount, stringFragments.length);
+        else segment = stringFragments.sublist(j * _segmentCount, (j + 1) * _segmentCount);
+        _counter += "\n" + _unameController.text;
+        print("segment =====> " + segment.length.toString());
+        for (int i = 0; i < segment.length; i++) {
+          final fragment = segment[i];
+          var index = fragment.indexOf("&id=");
+          if (index < 0) index = fragment.indexOf("?id=");
+          if (index < 0) continue;
+          String id = "";
+          String skuId = "";
+          id = fragment.substring(index + 4, index + 16);
+          final skuIdIndex = fragment.indexOf("skuId=");
+          print("skuIdIndex =====> " + skuIdIndex.toString());
+          if (skuIdIndex > 0) skuId = "_" + fragment.substring(skuIdIndex + 6, skuIdIndex + 19);
+          if (i > 0 && i < segment.length) {
+            _counter += "," + id + "_" + _number.text + skuId;
+          } else {
+            _counter += id + "_" + _number.text + skuId;
+          }
         }
       }
     });
@@ -68,54 +86,56 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Column(
-              children: [
-                TextField(
-                  decoration: const InputDecoration(
-                    labelText: "网址前缀",
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Column(
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: "网址前缀",
+                    ),
+                    controller: _unameController,
                   ),
-                  controller: _unameController,
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    labelText: "黏贴数据",
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: "黏贴数据",
+                    ),
+                    maxLines: 20,
+                    keyboardType: TextInputType.multiline,
+                    controller: _multiCopy,
                   ),
-                  maxLines: 20,
-                  keyboardType: TextInputType.multiline,
-                  controller: _multiCopy,
-                ),
-                // TextField(
-                //   decoration: const InputDecoration(
-                //     labelText: "商品ID或者商品链接",
-                //   ),
-                //   controller: _url,
-                // ),
-                TextField(
-                  decoration: const InputDecoration(
-                    labelText: "购买数量",
+                  // TextField(
+                  //   decoration: const InputDecoration(
+                  //     labelText: "商品ID或者商品链接",
+                  //   ),
+                  //   controller: _url,
+                  // ),
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: "购买数量",
+                    ),
+                    controller: _number,
                   ),
-                  controller: _number,
-                ),
-                TextField(
-                  decoration: const InputDecoration(
-                    labelText: "每一组多少个（默认不分）",
+                  TextField(
+                    decoration: const InputDecoration(
+                      labelText: "每一组多少个（默认不分）",
+                    ),
+                    controller: _numberEachSegment,
                   ),
-                  controller: _numberEachSegment,
-                ),
-                const Text(
-                  "生成链接：",
-                  textAlign: TextAlign.left,
-                ),
-                SelectableText(
-                  _counter, //字符串重复六次
-                ),
-              ],
-            ),
-          ],
+                  const Text(
+                    "生成链接：",
+                    textAlign: TextAlign.left,
+                  ),
+                  SelectableText(
+                    _counter, //字符串重复六次
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
