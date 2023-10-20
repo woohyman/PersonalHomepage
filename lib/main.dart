@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_image_generator/qr_image_generator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,28 +40,28 @@ TextEditingController _number = TextEditingController(text: "1");
 TextEditingController _numberEachSegment = TextEditingController(text: "不分组");
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _counter = "";
+  final List<Widget> _counter = List.empty(growable: true);
 
   void _incrementCounter() {
     setState(() {
       var stringFragments = _multiCopy.text.split("https://");
-      _counter = "";
+      _counter.clear();
       int _segmentCount = int.tryParse(_numberEachSegment.text) ?? (stringFragments.length - 1);
       stringFragments = stringFragments.sublist(1, stringFragments.length);
       var groups = 0;
       if (stringFragments.length % _segmentCount > 0)
-        groups = (stringFragments.length / _segmentCount).toInt()+1;
+        groups = (stringFragments.length / _segmentCount).toInt() + 1;
       else
         groups = (stringFragments.length / _segmentCount).toInt();
 
-      print("groups =====> " + groups.toString() + " " + _segmentCount.toString());
       for (int j = 0; j < groups; j++) {
-        print("groups =====222222> " + groups.toString());
         List segment = List.empty();
-        if (j == groups - 1) segment = stringFragments.sublist(j * _segmentCount, stringFragments.length);
-        else segment = stringFragments.sublist(j * _segmentCount, (j + 1) * _segmentCount);
-        _counter += "\n" + _unameController.text;
-        print("segment =====> " + segment.length.toString());
+        if (j == groups - 1)
+          segment = stringFragments.sublist(j * _segmentCount, stringFragments.length);
+        else
+          segment = stringFragments.sublist(j * _segmentCount, (j + 1) * _segmentCount);
+        var url = _unameController.text;
+        String pngName = "";
         for (int i = 0; i < segment.length; i++) {
           final fragment = segment[i];
           var index = fragment.indexOf("&id=");
@@ -64,16 +69,40 @@ class _MyHomePageState extends State<MyHomePage> {
           if (index < 0) continue;
           String id = "";
           String skuId = "";
+
           id = fragment.substring(index + 4, index + 16);
           final skuIdIndex = fragment.indexOf("skuId=");
-          print("skuIdIndex =====> " + skuIdIndex.toString());
           if (skuIdIndex > 0) skuId = "_" + fragment.substring(skuIdIndex + 6, skuIdIndex + 19);
           if (i > 0 && i < segment.length) {
-            _counter += "," + id + "_" + _number.text + skuId;
+            pngName += "," + id + "_" + _number.text + skuId;
+            url += "," + id + "_" + _number.text + skuId;
           } else {
-            _counter += id + "_" + _number.text + skuId;
+            pngName += id + "_" + _number.text + skuId;
+            url += id + "_" + _number.text + skuId;
           }
         }
+
+        print("value ==============================>");
+        getExternalStorageDirectory()
+            .then((value) => {
+                  print("value ==============================>111111$value"),
+                  QRGenerator().generate(
+                    data: url,
+                    filePath: '${value?.path}/$pngName.png',
+                  ),
+                })
+            .onError((error, stackTrace) => {print("value =======>$error")});
+
+        _counter.add(Row(
+          children: [
+            SelectableText(url),
+            QrImageView(
+              data: url,
+              version: QrVersions.auto,
+              size: 200.0,
+            ),
+          ],
+        ));
       }
     });
   }
@@ -129,9 +158,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     "生成链接：",
                     textAlign: TextAlign.left,
                   ),
-                  SelectableText(
-                    _counter, //字符串重复六次
-                  ),
+                  // SelectableText(
+                  //   _counter, //字符串重复六次
+                  // ),
+                  ..._counter,
                 ],
               ),
             ],
