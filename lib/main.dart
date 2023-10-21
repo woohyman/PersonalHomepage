@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_image_generator/qr_image_generator.dart';
+import 'package:taobaotools/pages/taobao_tool/app.dart';
+
+import 'domain/taobao_tool/product_mix.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,12 +13,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '应用百宝箱',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: '工具'),
+      home: const MyHomePage(title: '淘宝工具'),
     );
   }
 }
@@ -34,145 +32,31 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-TextEditingController _multiCopy = TextEditingController();
-TextEditingController _unameController = TextEditingController(text: "https://h5.m.taobao.com/cart/order.html?buyMlow=false&buyParam=");
-TextEditingController _number = TextEditingController(text: "1");
-TextEditingController _numberEachSegment = TextEditingController(text: "不分组");
-
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Widget> _counter = List.empty(growable: true);
-
-  void _incrementCounter() {
-    setState(() {
-      var stringFragments = _multiCopy.text.split("https://");
-      _counter.clear();
-      int _segmentCount = int.tryParse(_numberEachSegment.text) ?? (stringFragments.length - 1);
-      stringFragments = stringFragments.sublist(1, stringFragments.length);
-      var groups = 0;
-      if (stringFragments.length % _segmentCount > 0)
-        groups = (stringFragments.length / _segmentCount).toInt() + 1;
-      else
-        groups = (stringFragments.length / _segmentCount).toInt();
-
-      for (int j = 0; j < groups; j++) {
-        List segment = List.empty();
-        if (j == groups - 1)
-          segment = stringFragments.sublist(j * _segmentCount, stringFragments.length);
-        else
-          segment = stringFragments.sublist(j * _segmentCount, (j + 1) * _segmentCount);
-        var url = _unameController.text;
-        String pngName = "";
-        for (int i = 0; i < segment.length; i++) {
-          final fragment = segment[i];
-          var index = fragment.indexOf("&id=");
-          if (index < 0) index = fragment.indexOf("?id=");
-          if (index < 0) continue;
-          String id = "";
-          String skuId = "";
-
-          id = fragment.substring(index + 4, index + 16);
-          final skuIdIndex = fragment.indexOf("skuId=");
-          if (skuIdIndex > 0) skuId = "_" + fragment.substring(skuIdIndex + 6, skuIdIndex + 19);
-          if (i > 0 && i < segment.length) {
-            pngName += "," + id + "_" + _number.text + skuId;
-            url += "," + id + "_" + _number.text + skuId;
-          } else {
-            pngName += id + "_" + _number.text + skuId;
-            url += id + "_" + _number.text + skuId;
-          }
-        }
-
-        print("value ==============================>");
-        getExternalStorageDirectory()
-            .then((value) => {
-                  print("value ==============================>111111$value"),
-                  QRGenerator().generate(
-                    data: url,
-                    filePath: '${value?.path}/$pngName.png',
-                  ),
-                })
-            .onError((error, stackTrace) => {print("value =======>$error")});
-
-        _counter.add(Row(
-          children: [
-            SelectableText(url),
-            QrImageView(
-              data: url,
-              version: QrVersions.auto,
-              size: 200.0,
-            ),
-          ],
-        ));
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                children: [
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: "网址前缀",
-                    ),
-                    controller: _unameController,
-                  ),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: "黏贴数据",
-                    ),
-                    maxLines: 20,
-                    keyboardType: TextInputType.multiline,
-                    controller: _multiCopy,
-                  ),
-                  // TextField(
-                  //   decoration: const InputDecoration(
-                  //     labelText: "商品ID或者商品链接",
-                  //   ),
-                  //   controller: _url,
-                  // ),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: "购买数量",
-                    ),
-                    controller: _number,
-                  ),
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: "每一组多少个（默认不分）",
-                    ),
-                    controller: _numberEachSegment,
-                  ),
-                  const Text(
-                    "生成链接：",
-                    textAlign: TextAlign.left,
-                  ),
-                  // SelectableText(
-                  //   _counter, //字符串重复六次
-                  // ),
-                  ..._counter,
-                ],
-              ),
-            ],
+    return Row(
+      children: [
+        Container(
+          width: 300,
+          color: Colors.black12,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Image.network(
+                  'https://img.51miz.com/Element/00/36/66/64/cfe49d21_E366664_78d08733.png',
+                  width: 100,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        const Expanded(
+          flex: 1,
+          child: TaobaoToolWidget(),
+        )
+      ],
     );
   }
 }
