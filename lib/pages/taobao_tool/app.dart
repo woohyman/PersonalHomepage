@@ -33,10 +33,15 @@ class _TaobaoToolWidgetState extends State<TaobaoToolWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("淘宝工具"),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.black45,
+      //   title: const Text(
+      //     "淘宝工具",
+      //     style.dart: TextStyle(
+      //       color: Colors.white70,
+      //     ),
+      //   ),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

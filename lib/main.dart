@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:taobaotools/pages/app_download/app.dart';
+import 'package:taobaotools/pages/fc_game/app.dart';
 import 'package:taobaotools/pages/taobao_tool/app.dart';
-
-import 'domain/taobao_tool/product_mix.dart';
+import 'package:taobaotools/pages/tv/app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,14 +34,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Widget fragmentWidget = const TaobaoToolWidget();
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 300,
-          color: Colors.black12,
-          child: Padding(
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: Colors.black,
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -48,13 +51,126 @@ class _MyHomePageState extends State<MyHomePage> {
                   'https://img.51miz.com/Element/00/36/66/64/cfe49d21_E366664_78d08733.png',
                   width: 100,
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "工具",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 18,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
+                      foregroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == TaobaoToolWidget ? Colors.white : Colors.white60;
+                      }),
+                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == TaobaoToolWidget ? Colors.blue : Colors.transparent;
+                      }),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        fragmentWidget = const TaobaoToolWidget();
+                      });
+                    },
+                    child: const Text(
+                      "淘宝拼接下单",
+                      style: TextStyle(
+                        fontSize: 14,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const Text(
+                  "娱乐",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 18,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
+                      foregroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == TvWidget ? Colors.white : Colors.white60;
+                      }),
+                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == TvWidget ? Colors.blue : Colors.transparent;
+                      }),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        fragmentWidget = const TvWidget();
+                      });
+                    },
+                    child: const Text("电视"),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
+                      foregroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == FcGameWidget ? Colors.white : Colors.white60;
+                      }),
+                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == FcGameWidget ? Colors.blue : Colors.transparent;
+                      }),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        fragmentWidget = const FcGameWidget();
+                      });
+                    },
+                    child: const Text("红白机游戏"),
+                  ),
+                ),
+                const Text(
+                  "下载",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 18,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
+                      foregroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == AppDownload ? Colors.white : Colors.white60;
+                      }),
+                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                        return fragmentWidget.runtimeType == AppDownload ? Colors.blue : Colors.transparent;
+                      }),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        fragmentWidget = const AppDownload();
+                      });
+                    },
+                    child: const Text("安装包下载"),
+                  ),
+                ),
               ],
             ),
           ),
         ),
-        const Expanded(
-          flex: 1,
-          child: TaobaoToolWidget(),
+        Expanded(
+          flex: 10,
+          child: fragmentWidget,
         )
       ],
     );

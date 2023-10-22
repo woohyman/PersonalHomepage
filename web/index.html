@@ -28,7 +28,7 @@
     <script src="flutter.js" defer></script>
 </head>
 <body>
-<div style="text-align:center;">
+<div style="text-align:center;" id="title">
     <p>数据加载中请稍后。。。</p>
 </div>
 <!-- Loading indicator -->
@@ -90,6 +90,7 @@
 <script>
     window.addEventListener('load', function () {
       var loading = document.querySelector('#loading');
+      var title = document.getElementById('title');
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
@@ -105,6 +106,7 @@
         // before getting rid of the "loading" div.
         window.setTimeout(function () {
           loading.remove();
+          title.remove();
         }, 200);
       });
     });
