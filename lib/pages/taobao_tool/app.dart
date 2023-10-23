@@ -33,110 +33,106 @@ class _TaobaoToolWidgetState extends State<TaobaoToolWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.black45,
-      //   title: const Text(
-      //     "淘宝工具",
-      //     style.dart: TextStyle(
-      //       color: Colors.white70,
-      //     ),
-      //   ),
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    flex: 8,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: "下单网址前缀",
-                      ),
-                      controller: _unameController,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: "下单网址前缀",
                     ),
+                    controller: _unameController,
                   ),
-                  const Spacer(
-                    flex: 1,
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: "购买数量",
-                      ),
-                      controller: _number,
+                ),
+                const Spacer(
+                  flex: 1,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: "购买数量",
                     ),
+                    controller: _number,
                   ),
-                  const Spacer(
-                    flex: 1,
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        labelText: "每一组多少个",
-                      ),
-                      controller: _numberEachSegment,
+                ),
+                const Spacer(
+                  flex: 1,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: "每一组多少个",
                     ),
+                    controller: _numberEachSegment,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      margin: const EdgeInsets.all(16),
-                      child: TextField(
-                        keyboardType: TextInputType.multiline,
-                        maxLines: 27,
-                        controller: _multiCopy,
-                        decoration: const InputDecoration(
-                            hintText: "黏贴数据（把商品链接放进来,可以多个一起）",
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                              width: 1,
-                              color: Colors.redAccent,
-                            ))),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      height: 678,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.redAccent,
-                          width: 1,
-                        ), // border
-                        borderRadius: BorderRadius.circular((4)), // 圆角
-                      ),
-                      margin: const EdgeInsets.all(16),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "生成链接：",
-                              textAlign: TextAlign.left,
-                            ),
-                            ..._counter
-                          ],
+                ),
+              ],
+            ),
+            Expanded(
+              flex: 1,
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          margin: const EdgeInsets.all(16),
+                          child: TextField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: constraints.maxHeight~/20,
+                            controller: _multiCopy,
+                            decoration: const InputDecoration(
+                                hintText: "黏贴数据（把商品链接放进来,可以多个一起）",
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.redAccent,
+                                    ))),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          height: double.infinity,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.redAccent,
+                              width: 1,
+                            ), // border
+                            borderRadius: BorderRadius.circular((4)), // 圆角
+                          ),
+                          margin: const EdgeInsets.all(16),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "生成链接：",
+                                  textAlign: TextAlign.left,
+                                ),
+                                ..._counter
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
