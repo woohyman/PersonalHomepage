@@ -14,6 +14,7 @@ dependencies:
   qr_flutter: ^4.1.0
   qr_image_generator: ^0.2.8
   path_provider: ^2.1.1
+  flukit: ^3.0.1
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,9 @@ import 'package:taobaotools/pages/fc_game/app.dart';
 import 'package:taobaotools/pages/taobao_tool/app.dart';
 import 'package:taobaotools/pages/tv/app.dart';
 
+import 'layout/auto_width_colum.dart';
+import 'model/style.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -43,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Container(
           color: Colors.black,
           padding: const EdgeInsets.all(16),
-          child: Column(
+          child: AutoWidthColum(
             children: [
               Image.network(
                 'https://img.51miz.com/Element/00/36/66/64/cfe49d21_E366664_78d08733.png',
@@ -62,15 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 child: TextButton(
-                  style: ButtonStyle(
-                    shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
-                    foregroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == TaobaoToolWidget ? Colors.white : Colors.white60;
-                    }),
-                    backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == TaobaoToolWidget ? Colors.blue : Colors.transparent;
-                    }),
-                  ),
+                  style: getButtonStyle(
+                      fragmentWidget.runtimeType == TaobaoToolWidget),
                   onPressed: () {
                     setState(() {
                       fragmentWidget = const TaobaoToolWidget();
@@ -95,15 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 child: TextButton(
-                  style: ButtonStyle(
-                    shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
-                    foregroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == TvWidget ? Colors.white : Colors.white60;
-                    }),
-                    backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == TvWidget ? Colors.blue : Colors.transparent;
-                    }),
-                  ),
+                  style: getButtonStyle(fragmentWidget.runtimeType == TvWidget),
                   onPressed: () {
                     setState(() {
                       fragmentWidget = const TvWidget();
@@ -114,15 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 child: TextButton(
-                  style: ButtonStyle(
-                    shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
-                    foregroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == FcGameWidget ? Colors.white : Colors.white60;
-                    }),
-                    backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == FcGameWidget ? Colors.blue : Colors.transparent;
-                    }),
-                  ),
+                  style: getButtonStyle(
+                      fragmentWidget.runtimeType == FcGameWidget),
                   onPressed: () {
                     setState(() {
                       fragmentWidget = const FcGameWidget();
@@ -141,15 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 child: TextButton(
-                  style: ButtonStyle(
-                    shape: const MaterialStatePropertyAll(RoundedRectangleBorder()),
-                    foregroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == AppDownload ? Colors.white : Colors.white60;
-                    }),
-                    backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      return fragmentWidget.runtimeType == AppDownload ? Colors.blue : Colors.transparent;
-                    }),
-                  ),
+                  style:
+                      getButtonStyle(fragmentWidget.runtimeType == AppDownload),
                   onPressed: () {
                     setState(() {
                       fragmentWidget = const AppDownload();
