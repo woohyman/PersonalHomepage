@@ -140,7 +140,7 @@ class AutoWidthColumFlex extends RenderFlex {
   void performLayout() {
     super.performLayout();
 
-    double maxWidth = 100;
+    double maxWidth = 0;
 
     //遍历找出宽度的最大值
     RenderBox? child = firstChild;
@@ -158,7 +158,7 @@ class AutoWidthColumFlex extends RenderFlex {
     while (child != null) {
       final FlexParentData childParentData =
           child.parentData! as FlexParentData;
-      child.layout(constraints.copyWith(minWidth: 100),
+      child.layout(constraints.copyWith(minWidth: maxWidth),
           parentUsesSize: true);
       child = childParentData.nextSibling;
     }
