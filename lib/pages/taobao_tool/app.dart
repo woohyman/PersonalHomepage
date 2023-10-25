@@ -8,6 +8,26 @@ TextEditingController _unameController = TextEditingController(text: "https://h5
 TextEditingController _number = TextEditingController(text: "1");
 TextEditingController _numberEachSegment = TextEditingController(text: "100000");
 
+void main() {
+  runApp(const _MyApp());
+}
+
+class _MyApp extends StatelessWidget {
+  const _MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '应用百宝箱',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const TaobaoToolWidget(),
+    );
+  }
+}
+
 class TaobaoToolWidget extends StatefulWidget {
   const TaobaoToolWidget({super.key});
 
